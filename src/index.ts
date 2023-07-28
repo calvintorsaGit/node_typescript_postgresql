@@ -8,11 +8,14 @@ import userRoutes from "./routes/UserRoutes";
 
 dotenv.config();
 
-connectDB();
-
 // User Route
 app.use("/api/auth", userRoutes);
 
 // Middleware
 app.use(notFound);
 app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, (): void => console.log(`Server is running on ${PORT}`));
+

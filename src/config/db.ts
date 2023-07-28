@@ -1,7 +1,9 @@
-import mongoose, { ConnectOptions } from 'mongoose';
+const Pool = require('pg').Pool;
 
-const connectDB = async () => {
-
-}
-
-export default connectDB;
+export const dbPool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'user',
+    password: '1234',
+    port: 5432,
+});

@@ -1,62 +1,98 @@
 import asyncHandler from 'express-async-handler';
 import {Request, Response} from 'express';
-import User, {IUser} from '../models/User';
+import {dbPool} from "../config/db";
 
 // @Desc Get all users
 // @Route /api/auth
 // @Method GET
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-
-    const users: Array<IUser> = await User.find({}).select('-password');
-    res.status(201).json({success: true, count: users.length, users});
-
-})
-
-// @Desc Login
-// @Route /api/auth/
-// @Method POST
-export const login = asyncHandler(async (req: Request, res: Response) => {
-
-    const {email, password} = req.body;
-    const user: IUser = await User.findOne({email});
-
-    if (!user) {
-        res.status(401);
-        throw new Error("User not found");
-    }
-
-    if (user.password === password) {
-
-        res.status(201).json({
-            success: true, user: {
-                email: user.email
-            }
-        })
-
-    } else {
-        res.status(401);
-        throw new Error("Email or password incorrect");
-    }
-
-})
-
-// @Desc Register
-// @Route /api/auth/register
-// @Method POST
-export const register = asyncHandler(async (req: Request, res: Response) => {
-
-    const {email, password} = req.body;
-
-    const user = new User({
-        email, password
-    });
-
-    await user.save();
-
-    res.status(201).json({
-        success: true, user: {
-            email: user.email
+    dbPool.query('SELECT * FROM users', (error, results) => {
+        if (error) {
+            throw error;
         }
+        res.status(200).json(results.rows);
     });
+    // res.status(201).json({success: true, count: users.length, users});
 
 })
+
+
+// const Pool = require('pg').Pool;
+// export const dbPool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'user',
+//     password: '1234',
+//     port: 5432,
+// });
+//
+
+// const getUsers = (request, response) => {
+//     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+//         if (error) {
+//             throw error;
+//         }
+//         response.status(200).json(results.rows);
+//     });
+// };
+//
+// const getUserById = (request, response) => {
+//     const id = parseInt(request.params.id);
+//
+//     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
+//         if (error) {
+//             throw error;
+//         }
+//         response.status(200).json(results.rows);
+//     });
+// };
+//
+// const createUser = (request, response) => {
+//     const {name, email} = request.body;
+//
+//     pool.query(
+//         'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+//         [name, email],
+//         (error, results) => {
+//             if (error) {
+//                 throw error;
+//             }
+//             response.status(201).send(`User added with ID: ${results.rows[0].id}`);
+//         }
+//     );
+// };
+//
+// const updateUser = (request, response) => {
+//     const id = parseInt(request.params.id);
+//     const {name, email} = request.body;
+//
+//     pool.query(
+//         'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+//         [name, email, id],
+//         (error, results) => {
+//             if (error) {
+//                 throw error;
+//             }
+//             response.status(200).send(`User modified with ID: ${id}`);
+//         }
+//     );
+// };
+//
+// const deleteUser = (request, response) => {
+//     const id = parseInt(request.params.id);
+//
+//     pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
+//         if (error) {
+//             throw error;
+//         }
+//         response.status(200).send(`User deleted with ID: ${id}`);
+//     });
+// };
+//
+// module.exports = {
+//     getUsers,
+//     getUserById,
+//     createUser,
+//     updateUser,
+//     deleteUser,
+// };

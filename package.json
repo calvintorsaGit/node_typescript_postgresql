@@ -23,6 +23,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^7.3.4",
+    "pg": "^8.11.1",
     "socket.io": "^4.6.1"
   }
 }
