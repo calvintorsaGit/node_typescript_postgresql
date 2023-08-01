@@ -1,18 +1,15 @@
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import {NextFunction, Request, Response} from 'express';
-import CustomRequest = Express.CustomRequest;
 
-declare namespace Express {
-    export interface CustomRequest extends Request {
-        token: string | JwtPayload;
-    }
+export interface CustomRequest{
+    token: string | JwtPayload;
 }
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.header("x_auth-token");
 
     if (!token) {
-        return res.status(403).send("A token is required for authentication");
+        return res.status(403).send({message:"A token is required for authentication"});
     }
     try {
         (req as CustomRequest).token = jwt.verify(token, process.env.JWT_SECRET);

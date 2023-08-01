@@ -1,7 +1,6 @@
 import express from 'express';
 import {getUsers, getUserByEmail, createUser, updateUser, deleteUser} from '../controllers/UserController';
 
-
 const userRoutes = express.Router();
 
 userRoutes.route("/").get(getUsers);
