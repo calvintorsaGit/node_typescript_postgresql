@@ -1,4 +1,3 @@
-// @/models.ts
 import {Table, Model, Column, CreatedAt, UpdatedAt} from "sequelize-typescript";
 
 @Table({

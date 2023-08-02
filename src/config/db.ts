@@ -3,10 +3,10 @@ import {User} from "../Model/User";
 
 const connection = new Sequelize({
     dialect: "postgres",
-    host: "localhost",
-    username: "postgres",
-    database: 'user',
-    password: '1234',
+    host: process.env.DB_HOST,
+    username: process.env.DB_USERNAME,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
     port: 5432,
     models: [User]
 });

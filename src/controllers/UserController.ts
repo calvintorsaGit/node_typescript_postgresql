@@ -11,7 +11,7 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
 })
 
 // @Desc Get user by email
-// @Route /api/user//findUser
+// @Route /api/user/findUser
 // @Method GET
 export const getUserByEmail = asyncHandler(async (req: Request, res: Response) => {
     const {email} = req.body;
