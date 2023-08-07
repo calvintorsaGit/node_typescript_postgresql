@@ -1,6 +1,6 @@
 import express, {Application} from 'express';
 import dotenv from 'dotenv';
-import connectDB from './config/db';
+import {connectDB} from './config/db';
 import {notFound, errorHandler} from './middlewares/ErrorMiddleware';
 import timeout from 'connect-timeout'
 

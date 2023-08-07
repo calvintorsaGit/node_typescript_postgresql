@@ -1,15 +1,18 @@
 import {login} from "../../src/controllers/AuthController"
+import {expect, jest} from '@jest/globals';
 
-const {User} = require("../../src/Model/User");
+const User = require("../../src/Model/User");
+const db = require("../../src/config/db")
 const {mockResponse, mockRequest, mockNext} = require('../mock/Mock')
+const mSequelize = {};
 
-jest.mock('../../src/Model/User', () => ({
-    findOne: jest.fn().mockReturnValue({password: 12345})
-}));
+jest.mock('../../src/config/db', () => {
+    return {sequelize: mSequelize};
+});
 
 describe('AuthController', () => {
 
-    it('should return 400 if password not exist', () => {
+    it('should return 200 if password not exist', () => {
         const req = mockRequest({body: {email: "test@gmail.com", password: "12345"}});
         const res = mockResponse();
 

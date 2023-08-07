@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import {Request, Response} from 'express';
-import {User} from "../Model/User";
+import User from "../Model/User";
 
 // @Desc Get all users
 // @Route /api/user
