@@ -1,24 +1,36 @@
 import {login} from "../../src/controllers/AuthController"
-import {expect, jest} from '@jest/globals';
+import User from "../../src/Model/User";
+import {jest} from '@jest/globals';
 
-const User = require("../../src/Model/User");
-const db = require("../../src/config/db")
 const {mockResponse, mockRequest, mockNext} = require('../mock/Mock')
-const mSequelize = {};
 
-jest.mock('../../src/config/db', () => {
-    return {sequelize: mSequelize};
-});
+jest.mock("../../src/utils/generateToken",
+    () => () => "");
 
 describe('AuthController', () => {
 
-    it('should return 200 if password not exist', () => {
+    it('should return 200 if password exist and equal', () => {
         const req = mockRequest({body: {email: "test@gmail.com", password: "12345"}});
         const res = mockResponse();
 
-        login(req, res, mockNext);
+        jest.spyOn(User, 'findOne')
+            .mockResolvedValue(Promise.resolve({password: "12345"}));
 
-        expect(res.status).toBeCalledWith(400);
+        login(req, res);
+        expect(res.status).toHaveBeenCalledWith(200);
+
+    })
+
+
+    it('should return 400 if password exist and NOT equal', () => {
+        const req = mockRequest({body: {email: "test@gmail.com", password: "1234"}});
+        const res = mockResponse();
+
+        jest.spyOn(User, 'findOne')
+            .mockReturnValue(Promise.resolve({password: "12345"}))
+        login(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
     })
 
 })
